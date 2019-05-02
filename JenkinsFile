@@ -6,7 +6,7 @@ podTemplate(label: 'mypod', cloud: 'Kubernetes',
   volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
   node('mypod') {
       stage('build and test') {
-        checkout scm
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'mygithub', url: 'https://github.com/prabaharanit/docker-angular-example']]])
         docker.image('mhart/alpine-node:4.4.3').inside {
           env.NODE_ENV = "test"
           sh 'apk add --update make gcc g++ python git'
